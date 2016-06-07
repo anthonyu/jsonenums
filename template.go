@@ -45,13 +45,14 @@ func init() {
 // MarshalJSON is generated so {{$typename}} satisfies json.Marshaler.
 func (r {{$typename}}) MarshalJSON() ([]byte, error) {
     if s, ok := interface{}(r).(fmt.Stringer); ok {
-        return json.Marshal(s.String())
+        return json.Marshal(strings.ToLower(s.String()))
     }
     s, ok := _{{$typename}}ValueToName[r]
     if !ok {
         return nil, fmt.Errorf("invalid {{$typename}}: %d", r)
     }
-    return json.Marshal(s)
+    sl := strings.ToLower(s)
+    return json.Marshal(sl)
 }
 
 // UnmarshalJSON is generated so {{$typename}} satisfies json.Unmarshaler.
@@ -60,7 +61,8 @@ func (r *{{$typename}}) UnmarshalJSON(data []byte) error {
     if err := json.Unmarshal(data, &s); err != nil {
         return fmt.Errorf("{{$typename}} should be a string, got %s", data)
     }
-    v, ok := _{{$typename}}NameToValue[s]
+    su := string.ToUpper(s)
+    v, ok := _{{$typename}}NameToValue[su]
     if !ok {
         return fmt.Errorf("invalid {{$typename}} %q", s)
     }
