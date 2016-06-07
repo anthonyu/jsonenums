@@ -16,6 +16,7 @@ package {{.PackageName}}
 import (
     "encoding/json"
     "fmt"
+    "strings"
 )
 
 {{range $typename, $values := .TypesAndValues}}
@@ -61,7 +62,7 @@ func (r *{{$typename}}) UnmarshalJSON(data []byte) error {
     if err := json.Unmarshal(data, &s); err != nil {
         return fmt.Errorf("{{$typename}} should be a string, got %s", data)
     }
-    su := string.ToUpper(s)
+    su := strings.ToUpper(s)
     v, ok := _{{$typename}}NameToValue[su]
     if !ok {
         return fmt.Errorf("invalid {{$typename}} %q", s)
